@@ -1,0 +1,8 @@
+ru:
+  bless_this_wiki_backlinks:
+    label_referenced_by: "Ссылаются на эту страницу"
+    label_forward_links: "Ссылки на"
+    label_no_backlinks: "Ни одна страница не ссылается на эту."
+    label_backlinks_count:
+      one: "1 страница"
+      other: "%{count} страниц"

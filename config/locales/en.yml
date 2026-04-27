@@ -1,0 +1,8 @@
+en:
+  bless_this_wiki_backlinks:
+    label_referenced_by: "Referenced by"
+    label_forward_links: "Links to"
+    label_no_backlinks: "No pages link to this page."
+    label_backlinks_count:
+      one: "1 page"
+      other: "%{count} pages"
