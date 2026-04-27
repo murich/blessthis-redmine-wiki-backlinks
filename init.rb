@@ -8,6 +8,11 @@ Redmine::Plugin.register :bless_this_redmine_wiki_backlinks do
   author_url 'https://blessthis.software'
 
   requires_redmine version_or_higher: '5.0.0'
+
+  # Public permission — anyone who can view wiki pages can see backlinks
+  permission :view_wiki_backlinks, {
+    wiki_backlinks: [:show]
+  }, public: true, read: true
 end
 
 Rails.application.config.to_prepare do

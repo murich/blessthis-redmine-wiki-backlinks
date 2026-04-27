@@ -7,50 +7,27 @@ class WikiBacklinksController < ApplicationController
     backlinks = WikiPageLink.visible_backlinks_for(@wiki_page, User.current)
     forward_links = WikiPageLink.visible_forward_links_for(@wiki_page, User.current)
 
-    respond_to do |format|
-      format.api do
-        render json: {
-          wiki_page: {
-            title: @wiki_page.title,
-            forward_links: forward_links.map { |link|
-              {
-                page_title: link.target_page.title,
-                link_text: link.link_text,
-                project: link.target_page.wiki.project.identifier
-              }
-            },
-            backlinks: backlinks.map { |link|
-              {
-                page_title: link.source_page.title,
-                link_text: link.link_text,
-                project: link.source_page.wiki.project.identifier
-              }
-            }
+    data = {
+      wiki_page: {
+        title: @wiki_page.title,
+        forward_links: forward_links.map { |link|
+          {
+            page_title: link.target_page.title,
+            link_text: link.link_text,
+            project: link.target_page.wiki.project.identifier
+          }
+        },
+        backlinks: backlinks.map { |link|
+          {
+            page_title: link.source_page.title,
+            link_text: link.link_text,
+            project: link.source_page.wiki.project.identifier
           }
         }
-      end
-      format.json do
-        render json: {
-          wiki_page: {
-            title: @wiki_page.title,
-            forward_links: forward_links.map { |link|
-              {
-                page_title: link.target_page.title,
-                link_text: link.link_text,
-                project: link.target_page.wiki.project.identifier
-              }
-            },
-            backlinks: backlinks.map { |link|
-              {
-                page_title: link.source_page.title,
-                link_text: link.link_text,
-                project: link.source_page.wiki.project.identifier
-              }
-            }
-          }
-        }
-      end
-    end
+      }
+    }
+
+    render json: data
   end
 
   private
