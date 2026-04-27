@@ -1,0 +1,44 @@
+api.wiki_page do
+  api.title @page.title
+  if @page.parent
+    api.parent :title => @page.parent.title
+  end
+  api.text @content.text
+  api.version @content.version
+  api.author(:id => @content.author_id, :name => @content.author.name) unless @content.author_id.nil?
+  api.comments @content.comments
+  api.created_on @page.created_on
+  api.updated_on @content.updated_on
+
+  api.array :attachments do
+    @page.attachments.each do |attachment|
+      render_api_attachment(attachment, api)
+    end
+  end if include_in_api_response?('attachments')
+
+  # Wiki Backlinks plugin: include forward_links and backlinks
+  if include_in_api_response?('backlinks') && @page.respond_to?(:visible_backlinks)
+    forward_links = WikiPageLink.visible_forward_links_for(@page, User.current)
+    backlinks = WikiPageLink.visible_backlinks_for(@page, User.current)
+
+    api.array :forward_links do
+      forward_links.each do |link|
+        api.forward_link do
+          api.page_title link.target_page.title
+          api.link_text link.link_text
+          api.project link.target_page.wiki.project.identifier
+        end
+      end
+    end
+
+    api.array :backlinks do
+      backlinks.each do |link|
+        api.backlink do
+          api.page_title link.source_page.title
+          api.link_text link.link_text
+          api.project link.source_page.wiki.project.identifier
+        end
+      end
+    end
+  end
+end
