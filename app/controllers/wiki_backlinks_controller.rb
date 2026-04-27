@@ -3,11 +3,25 @@ class WikiBacklinksController < ApplicationController
   before_action :find_wiki_page
   accept_api_auth :show
 
+  # API endpoint: GET /projects/:project_id/wiki_backlinks/:id.json
+  # Authenticated via X-Redmine-API-Key header
   def show
+    render json: backlinks_data
+  end
+
+  # UI endpoint: GET /projects/:project_id/wiki_backlinks_data/:id
+  # Authenticated via browser session (no .json extension needed)
+  def show_for_ui
+    render json: backlinks_data
+  end
+
+  private
+
+  def backlinks_data
     backlinks = WikiPageLink.visible_backlinks_for(@wiki_page, User.current)
     forward_links = WikiPageLink.visible_forward_links_for(@wiki_page, User.current)
 
-    data = {
+    {
       wiki_page: {
         title: @wiki_page.title,
         forward_links: forward_links.map { |link|
@@ -26,11 +40,7 @@ class WikiBacklinksController < ApplicationController
         }
       }
     }
-
-    render json: data
   end
-
-  private
 
   def find_wiki_page
     return render_404 unless @project&.wiki

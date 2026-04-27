@@ -21,7 +21,8 @@ module BlessThisRedmineWikiBacklinks
 
           var projectId = match[1];
           var pageTitle = match[2];
-          var apiUrl = '/projects/' + projectId + '/wiki_backlinks/' + pageTitle + '.json';
+          // Use session-authenticated endpoint (not .json — that requires API key)
+          var apiUrl = '/projects/' + projectId + '/wiki_backlinks_data/' + pageTitle;
 
           var xhr = new XMLHttpRequest();
           xhr.open('GET', apiUrl);

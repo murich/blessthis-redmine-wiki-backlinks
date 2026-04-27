@@ -11,7 +11,7 @@ Redmine::Plugin.register :bless_this_redmine_wiki_backlinks do
 
   # Public permission — anyone who can view wiki pages can see backlinks
   permission :view_wiki_backlinks, {
-    wiki_backlinks: [:show]
+    wiki_backlinks: [:show, :show_for_ui]
   }, public: true, read: true
 end
 
